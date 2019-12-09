@@ -132,21 +132,29 @@ var upload = multer({
         //Algolia
         app.route("/search")
         .get ((req,res) => {
-            let queries = [
-                {
-                    indexName : "product",
-                    query : req.query.q,
-                    params : {
-                        hitsPerpage : 8
-                     }
-                }
-            ]
-            
-            client.search(queries, function(err,data){
-                console.log(data);
-            })
-            res.render("search")  
-        })        
+
+            if(req.query.q) {
+                    // console.log(req.query.q);
+                    let queries = [
+                        {
+                            indexName : "product",
+                            query : req.query.q,
+                            params : {
+                                hitsPerPage : 8
+                            }
+                        }
+                    ]
+                    
+                    client.search(queries, function(err,data){
+                    // console.log(data.results[0]);
+                    res.locals.search_results = data.results && data.results[0] && data.results[0].hits ? data.results[0].hits : []
+                    res.render("search")  
+                    });
+                } else {
+                    res.render("search")  
+            }
+        })   
+               
 
         app.route("/category")
         .get ((req,res) => {

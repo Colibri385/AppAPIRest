@@ -13,7 +13,9 @@
 
             <div>
                 <h4>Résultat :</h4>
-                <a href=""></a>
+                {{#each search_results}}
+                <a href="/{{this.objectID}}">{{this.title}}</a>
+                {{/each}}
             </div>
         </div>
      </div>
